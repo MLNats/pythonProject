@@ -15,7 +15,7 @@ st.title("EdTech Search Engine for Text and Images in Video content.")
 @st.cache(allow_output_mutation=True,suppress_st_warning=True)
 def connect2ES():
     # connect to ES on localhost on port 9200
-    es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+    es = Elasticsearch([{'host': 'host.docker.internal', 'port': 9200, 'use_ssl': False}])
     if es.ping():
             st.header('Connected to Es!')
     else:
@@ -25,7 +25,7 @@ def connect2ES():
 
 @st.cache(allow_output_mutation=True,suppress_st_warning=True)
 def load_encoder():
-    return hub.load("./USE4/")
+    return hub.load("https://tfhub.dev/google/universal-sentence-encoder/4")
 
 def keywordSearch(q):
     #Search by Keywords
@@ -87,6 +87,7 @@ def imageSimilaritybyNN(es, image_hash):
     return res
 
 es = connect2ES()
+
 encoder_load_state = st.text('Setting up the search Engine.')
 embed = load_encoder()
 encoder_load_state.text("Engine Ready! ")
